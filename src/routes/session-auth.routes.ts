@@ -4,7 +4,12 @@ import { createDatabaseConnection } from "../database";
 const router = Router();
 
 router.post("/login", async (req, res) => {
-  const { email, password } = req.query;
+  
+  if (!req.body.email || !req.body.password) {
+    return res.status(400).send("Email and password are required");
+  }
+
+  const { email, password } = req.body;
   const { userRepository } = await createDatabaseConnection();
   const user = await userRepository.findOne({
     where: {
